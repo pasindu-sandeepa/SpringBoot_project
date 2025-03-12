@@ -1,53 +1,24 @@
-package com.SpringBoot.Point_of_Sale.entity;
+package com.SpringBoot.Point_of_Sale.dto.request;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-
-@Entity
-@Table(name = "customer")
-
-public class Customer {
-    @Id
-    @Column(name = "customer_id",length = 40)
+public class CustomerUpdateDTO {
     private int customerID;
-
-    @Column(name = "customer_name",length = 40,nullable = false)
     private String customerName;
-
-    @Column(name = "customer_address",length = 250)
     private String customerAddress;
-
-    @Column(name = "contact_number",length = 15)
     private int contactNumber;
-
-    @Column(name = "email",length = 40)
     private String email;
-
-    @Column(name = "customer_salary")
     private double customerSalary;
 
-    @Column(name = "nic",length = 15)
-    private String nic;
-
-    @Column(name = "active_state",columnDefinition = "TINYINT default 1")
-    private boolean active;
-
-    public Customer() {
+    public CustomerUpdateDTO() {
     }
 
-    public Customer(int customerID, boolean active, String nic, String email, double customerSalary, int contactNumber, String customerName, String customerAddress) {
+    public CustomerUpdateDTO(int customerID, String customerName, String customerAddress, int contactNumber, String email, double customerSalary) {
         this.customerID = customerID;
-        this.active = active;
-        this.nic = nic;
-        this.email = email;
-        this.customerSalary = customerSalary;
-        this.contactNumber = contactNumber;
         this.customerName = customerName;
         this.customerAddress = customerAddress;
+        this.contactNumber = contactNumber;
+        this.email = email;
+        this.customerSalary = customerSalary;
     }
-
 
     public int getCustomerID() {
         return customerID;
@@ -55,14 +26,6 @@ public class Customer {
 
     public void setCustomerID(int customerID) {
         this.customerID = customerID;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     public String getCustomerName() {
@@ -97,14 +60,6 @@ public class Customer {
         this.email = email;
     }
 
-    public String getNic() {
-        return nic;
-    }
-
-    public void setNic(String nic) {
-        this.nic = nic;
-    }
-
     public double getCustomerSalary() {
         return customerSalary;
     }
@@ -115,16 +70,13 @@ public class Customer {
 
     @Override
     public String toString() {
-        return "Customer{" +
+        return "CustomerUpdateDTO{" +
                 "customerID=" + customerID +
                 ", customerName='" + customerName + '\'' +
                 ", customerAddress='" + customerAddress + '\'' +
                 ", contactNumber=" + contactNumber +
                 ", email='" + email + '\'' +
                 ", customerSalary=" + customerSalary +
-                ", nic='" + nic + '\'' +
-                ", active=" + active +
                 '}';
     }
 }
-
