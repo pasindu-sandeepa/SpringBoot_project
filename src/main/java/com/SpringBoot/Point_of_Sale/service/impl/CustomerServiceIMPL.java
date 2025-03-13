@@ -8,6 +8,9 @@ import com.SpringBoot.Point_of_Sale.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class CustomerServiceIMPL implements CustomerService {
 
@@ -70,4 +73,38 @@ public class CustomerServiceIMPL implements CustomerService {
 
         }
     }
+
+    @Override
+    public List<CustomerDTO> getAllCustomers() {
+        List<Customer> getAllCustomers = customerRepo.findAll();
+        List<CustomerDTO> customerDTOList = new ArrayList<>();
+
+       for(Customer customer : getAllCustomers){
+           CustomerDTO customerDTO = new CustomerDTO(
+                   customer.isActive(),
+                   customer.getNic(),
+                   customer.getCustomerSalary(),
+                   customer.getEmail(),
+                   customer.getContactNumber(),
+                   customer.getCustomerAddress(),
+                   customer.getCustomerName(),
+                   customer.getCustomerID()
+           );
+           customerDTOList.add(customerDTO);
+       }
+        return customerDTOList;
+    }
+
+    @Override
+    public String deletedCustomer(int customerId) {
+        if(customerRepo.existsById(customerId)){
+            customerRepo.deleteById(customerId);
+            return "Customer Deleted Succesfull" + customerId;
+            }else {
+            throw new RuntimeException("Customer not found");
+        }
+
+    }
+
+
 }
