@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class CustomerServiceIMPL implements CustomerService {
+public class  CustomerServiceIMPL implements CustomerService {
 
     @Autowired
     private CustomerRepo customerRepo;
@@ -104,6 +104,28 @@ public class CustomerServiceIMPL implements CustomerService {
             throw new RuntimeException("Customer not found");
         }
 
+    }
+
+    @Override
+    public List<CustomerDTO> getAllCustomersByActiveState(boolean activeState) {
+        List<Customer> getAllCustomers = customerRepo.findAllByActive(activeState);
+
+        List<CustomerDTO> customerDTOList = new ArrayList<>();
+
+        for(Customer customer : getAllCustomers){
+            CustomerDTO customerDTO = new CustomerDTO(
+                    customer.isActive(),
+                    customer.getNic(),
+                    customer.getCustomerSalary(),
+                    customer.getEmail(),
+                    customer.getContactNumber(),
+                    customer.getCustomerAddress(),
+                    customer.getCustomerName(),
+                    customer.getCustomerID()
+            );
+            customerDTOList.add(customerDTO);
+        }
+        return customerDTOList;
     }
 
 
