@@ -5,8 +5,11 @@ import com.SpringBoot.Point_of_Sale.dto.request.CustomerUpdateDTO;
 import com.SpringBoot.Point_of_Sale.entity.Customer;
 import com.SpringBoot.Point_of_Sale.repo.CustomerRepo;
 import com.SpringBoot.Point_of_Sale.service.CustomerService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import java.util.stream.Collectors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,84 +20,72 @@ public class  CustomerServiceIMPL implements CustomerService {
     @Autowired
     private CustomerRepo customerRepo;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
+    // Save Customer
     @Override
     public String saveCustomer(CustomerDTO customerDTO) {
-        Customer customer = new Customer(
-               customerDTO.getCustomerID(),
-                customerDTO.isActive(),
-                customerDTO.getNic(),
-                customerDTO.getEmail(),
-                customerDTO.getCustomerSalary(),
-                customerDTO.getContactNumber(),
-                customerDTO.getCustomerName(),
-                customerDTO.getCustomerAddress()
-        );
+        Customer customer = modelMapper.map(customerDTO, Customer.class);
         customerRepo.save(customer);
         return customerDTO.getCustomerName();
     }
 
+    // Update Customer
     @Override
     public String updateCustomer(CustomerUpdateDTO customerUpdateDTO) {
-      if(customerRepo.existsById(customerUpdateDTO.getCustomerID())){
-          Customer customer = customerRepo.getReferenceById(customerUpdateDTO.getCustomerID());
+        // Check if a customer with the given ID exists
+        if (customerRepo.existsById(customerUpdateDTO.getCustomerID())) {
+            // Retrieve the existing Customer entity
+            Customer customer = customerRepo.getReferenceById(customerUpdateDTO.getCustomerID());
 
-          customer.setCustomerName(customerUpdateDTO.getCustomerName());
-          customer.setCustomerSalary(customerUpdateDTO.getCustomerSalary());
-          customer.setContactNumber(customerUpdateDTO.getContactNumber());
-          customer.setEmail(customerUpdateDTO.getEmail());
-          customer.setCustomerAddress(customerUpdateDTO.getCustomerAddress());
+            // Map the properties of CustomerUpdateDTO to the retrieved Customer entity
+            modelMapper.map(customerUpdateDTO, customer);
 
-          customerRepo.save(customer);
-          return customerUpdateDTO.getCustomerName() + "updated Succesfull";
+            // Save the updated Customer entity
+            customerRepo.save(customer);
 
-      }else{
-          throw new RuntimeException("Customer not found");
-      }
+            // Return a confirmation message
+            return customerUpdateDTO.getCustomerName() + " updated Successfully";
 
-    }
-
-    @Override
-    public CustomerDTO getCustomerById(int customerId) {
-        if(customerRepo.existsById(customerId)) {
-            Customer customer = customerRepo.getReferenceById(customerId);
-            CustomerDTO customerDTO = new CustomerDTO(
-                    customer.isActive(),
-                    customer.getNic(),
-                    customer.getCustomerSalary(),
-                    customer.getEmail(),
-                    customer.getContactNumber(),
-                    customer.getCustomerAddress(),
-                    customer.getCustomerName(),
-                    customer.getCustomerID()
-            );
-            return customerDTO;
-        }  else {
+        } else {
+            // Throw an exception if the customer is not found
             throw new RuntimeException("Customer not found");
-
         }
     }
 
+
+    // Get Customer by ID
+    @Override
+    public CustomerDTO getCustomerById(int customerId) {
+        if (customerRepo.existsById(customerId)) {
+            // Retrieve the Customer entity
+            Customer customer = customerRepo.getReferenceById(customerId);
+
+            // Use ModelMapper to map Customer to CustomerDTO
+            return modelMapper.map(customer, CustomerDTO.class);
+        } else {
+            // Throw an exception if the Customer is not found
+            throw new RuntimeException("Customer not found");
+        }
+    }
+
+
+    // Get all Customers
     @Override
     public List<CustomerDTO> getAllCustomers() {
+        // Retrieve all customers from the database
         List<Customer> getAllCustomers = customerRepo.findAll();
-        List<CustomerDTO> customerDTOList = new ArrayList<>();
 
-       for(Customer customer : getAllCustomers){
-           CustomerDTO customerDTO = new CustomerDTO(
-                   customer.isActive(),
-                   customer.getNic(),
-                   customer.getCustomerSalary(),
-                   customer.getEmail(),
-                   customer.getContactNumber(),
-                   customer.getCustomerAddress(),
-                   customer.getCustomerName(),
-                   customer.getCustomerID()
-           );
-           customerDTOList.add(customerDTO);
-       }
+        // Use ModelMapper to map the list of Customers to a list of CustomerDTOs
+        List<CustomerDTO> customerDTOList = getAllCustomers.stream()
+                .map(customer -> modelMapper.map(customer, CustomerDTO.class))
+                .collect(Collectors.toList());
+
         return customerDTOList;
     }
 
+    // Delete Customer
     @Override
     public String deletedCustomer(int customerId) {
         if(customerRepo.existsById(customerId)){
@@ -106,27 +97,16 @@ public class  CustomerServiceIMPL implements CustomerService {
 
     }
 
-    @Override
-    public List<CustomerDTO> getAllCustomersByActiveState(boolean activeState) {
-        List<Customer> getAllCustomers = customerRepo.findAllByActive(activeState);
 
-        List<CustomerDTO> customerDTOList = new ArrayList<>();
+    // Get all Customers by Active State
+   @Override
+   public List<CustomerDTO> getAllCustomersByActiveState(boolean activeState) {
+       List<Customer> getAllCustomers = customerRepo.findAllByActive(activeState);
 
-        for(Customer customer : getAllCustomers){
-            CustomerDTO customerDTO = new CustomerDTO(
-                    customer.isActive(),
-                    customer.getNic(),
-                    customer.getCustomerSalary(),
-                    customer.getEmail(),
-                    customer.getContactNumber(),
-                    customer.getCustomerAddress(),
-                    customer.getCustomerName(),
-                    customer.getCustomerID()
-            );
-            customerDTOList.add(customerDTO);
-        }
-        return customerDTOList;
-    }
+       return getAllCustomers.stream()
+               .map(customer -> modelMapper.map(customer, CustomerDTO.class))
+               .collect(Collectors.toList());
+   }
 
 
 }

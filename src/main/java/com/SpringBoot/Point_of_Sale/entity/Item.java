@@ -6,9 +6,6 @@ import jakarta.persistence.*;
 @Entity
 @Table(name="item")
 
-
-//getters,setters,tostring wenuwata data kiyn eka dnna puluwan
-
 public class Item {
 
     @Id

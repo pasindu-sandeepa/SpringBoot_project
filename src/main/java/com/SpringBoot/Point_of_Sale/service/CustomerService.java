@@ -5,7 +5,7 @@ import com.SpringBoot.Point_of_Sale.dto.request.CustomerUpdateDTO;
 
 import java.util.List;
 
-public interface CustomerService {
+public interface  CustomerService {
   public String saveCustomer(CustomerDTO customerDTO);
 
   String updateCustomer(CustomerUpdateDTO customerUpdateDTO);
