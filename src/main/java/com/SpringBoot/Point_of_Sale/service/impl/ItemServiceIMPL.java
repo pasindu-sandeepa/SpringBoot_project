@@ -72,4 +72,6 @@ public class ItemServiceIMPL implements ItemService {
                 .collect(Collectors.toList());
         return new PaginatedResponseItemDTO(itemDTOs, itemsPage.getTotalElements());
     }
+
+
 }

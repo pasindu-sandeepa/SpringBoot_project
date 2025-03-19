@@ -2,6 +2,8 @@ package com.SpringBoot.Point_of_Sale.entity;
 
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "customer")
 
@@ -30,6 +32,9 @@ public class Customer {
 
     @Column(name = "active_state",columnDefinition = "TINYINT default 1")
     private boolean active;
+
+    @OneToMany(mappedBy = "customers")
+    private Set<Order> orders;
 
     public Customer() {
     }

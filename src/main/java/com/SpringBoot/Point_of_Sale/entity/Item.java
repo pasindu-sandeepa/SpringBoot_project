@@ -3,8 +3,11 @@ package com.SpringBoot.Point_of_Sale.entity;
 import com.SpringBoot.Point_of_Sale.entity.enums.MeasuringUnitType;
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 @Entity
 @Table(name="item")
+
 
 public class Item {
 
@@ -31,6 +34,11 @@ public class Item {
 
     @Column(name = "active_state",columnDefinition = "TINYINT default 1")
     private boolean activeState;
+
+    @OneToMany(mappedBy = "items")
+    private Set<OrderDetails> orderDetails;
+
+
 
 
     public Item() {
