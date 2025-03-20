@@ -1,6 +1,4 @@
 package com.SpringBoot.Point_of_Sale.entity;
-
-
 import jakarta.persistence.*;
 
 @Entity
