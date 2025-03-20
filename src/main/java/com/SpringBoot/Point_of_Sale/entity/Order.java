@@ -29,6 +29,12 @@ public class Order {
     public Order() {
     }
 
+    public Order(Customer customers, Date date, double total) {
+        this.customers = customers;
+        this.date = date;
+        this.total = total;
+    }
+
     public Order(int orderId, Set<OrderDetails> orderDetails, double total, Date date, Customer customers) {
         this.orderId = orderId;
         this.orderDetails = orderDetails;

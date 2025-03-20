@@ -8,8 +8,8 @@ public class RequestOrderSaveDTO {
 
     private int customers;
     private Date date;
-    private List<RequestOrderDetailsSave> orderDetails;
     private double total;
+    private List<RequestOrderDetailsSave> orderDetails;
 
     public RequestOrderSaveDTO() {
     }
@@ -29,12 +29,12 @@ public class RequestOrderSaveDTO {
         this.customers = customers;
     }
 
-    public List<RequestOrderDetailsSave> getOrderDetails() {
-        return orderDetails;
+    public Date getDate() {
+        return date;
     }
 
-    public void setOrderDetails(List<RequestOrderDetailsSave> orderDetails) {
-        this.orderDetails = orderDetails;
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public double getTotal() {
@@ -45,11 +45,11 @@ public class RequestOrderSaveDTO {
         this.total = total;
     }
 
-    public Date getDate() {
-        return date;
+    public List<RequestOrderDetailsSave> getOrderDetails() {
+        return orderDetails;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setOrderDetails(List<RequestOrderDetailsSave> orderDetails) {
+        this.orderDetails = orderDetails;
     }
 }
